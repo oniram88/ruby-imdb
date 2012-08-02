@@ -18,4 +18,5 @@ require "imdb/skeleton"
 require "imdb/search"
 require "imdb/movie"
 require "imdb/person"
+require "imdb/cast"
 

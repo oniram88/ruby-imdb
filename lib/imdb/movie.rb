@@ -8,22 +8,22 @@ module IMDB
 
     def initialize(id_of)
       # !!!DON'T FORGET DEFINE NEW METHODS IN SUPER!!!
-      super("Movie", {:imdb_id => String,
-            :poster => String,
-            :title => String,
-            :release_date => String,
-            :cast => Array,
-            :photos => Array,
-            :director => String,
-            :genres => Array,
-            :rating => Float,
-            :movielength => Integer,
-            :short_description => String,
-            :writers => Array}, [:imdb_id])
+      super("Movie", { :imdb_id => String,
+                       :poster => String,
+                       :title => String,
+                       :release_date => String,
+                       :cast => Array,
+                       :photos => Array,
+                       :director => String,
+                       :genres => Array,
+                       :rating => Float,
+                       :movielength => Integer,
+                       :short_description => String,
+                       :writers => Array }, [:imdb_id])
 
       @imdb_id = id_of
 
-      @link =  "http://www.imdb.com/title/tt#{@imdb_id}"
+      @link = "http://www.imdb.com/title/tt#{@imdb_id}"
     end
 
     # Get movie poster address
@@ -44,7 +44,7 @@ module IMDB
     # @return [String]
     def title
       doc.at("//head/meta[@name='title']")["content"].split(/\(\d+\)/)[0].strip! ||
-        doc.at("h1.header").children.first.text.strip
+          doc.at("h1.header").children.first.text.strip
 
     end
 
@@ -52,11 +52,14 @@ module IMDB
     # @return [Array]
     def cast
       doc.search("table.cast tr").map do |link|
-        picture = link.children[0].search("img")[0]["src"] rescue nil
-        name = link.children[1].content.strip rescue nil
-        profile_id = link.children[1].search('a[@href^="/name/nm"]').first["href"] rescue nil
+        #picture = link.children[0].search("img")[0]["src"] rescue nil
+        #name = link.children[1].content.strip rescue nil
+        id = link.children[1].search('a[@href^="/name/nm"]').first["href"].match(/\/name\/nm([0-9]+)/)[1] rescue nil
         char = link.children[3].content.strip rescue nil
-        IMDB::Person.new(@imdb_id, name, char, profile_id, picture) unless name.nil? and char.nil? and picture.nil? and profile_id.nil?
+        unless id.nil?
+          person = IMDB::Person.new(id)
+          IMDB::Cast.new(self, person, char)
+        end
       end.compact
     end
 
@@ -64,7 +67,7 @@ module IMDB
     # @return [Array]
     def photos
       begin
-        doc.search("#title-overview-widget .mediastrip img").map{|i|i["src"]}
+        doc.search("#title-overview-widget .mediastrip img").map { |i| i["src"] }
       rescue
         nil
       end
@@ -82,7 +85,7 @@ module IMDB
         end
       else
         year = doc.at("h1.header .nobr").text[/\d{4}/]
-         "#{year}-01-01"
+        "#{year}-01-01"
       end
     rescue
       nil
@@ -99,9 +102,9 @@ module IMDB
     def genres
       doc.xpath("//h4[contains(., 'Genre')]/..").search("a").map { |g|
         g.content unless g.content =~ /See more/
-        }.compact
-      rescue
-        nil
+      }.compact
+    rescue
+      nil
     end
 
     # Writer List
@@ -115,16 +118,15 @@ module IMDB
     #Get the movielength of the movie in minutes
     # @return [Integer]
     def movielength
-     doc.at("//h4[text()='Runtime:']/..").inner_html[/\d+ min/].to_i rescue nil
+      doc.at("//h4[text()='Runtime:']/..").inner_html[/\d+ min/].to_i rescue nil
     end
 
     # Writer List
     # @return [Array]
     def writers
-      doc.xpath("//a[@name='writers']/../../../..").search('a[@href^="/name/nm"]').map {|w|
-        name = w.content
-        profile = w['href']
-        IMDB::Person.new(@imdb_id, name, "nil", profile, "nil")
+      doc.xpath("//a[@name='writers']/../../../..").search('a[@href^="/name/nm"]').map { |w|
+        profile = w['href'].match(/\/name\/nm([0-9]+)/)[1] rescue nil
+        IMDB::Person.new(profile) unless profile.nil?
       }
     end
 

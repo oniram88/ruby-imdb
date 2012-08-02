@@ -30,6 +30,19 @@ Then /^the height of the actor should be "(.*)"$/ do |height|
   @result.height.should == height.to_s
 end
 
+Then /^the photo should be a link to an image$/ do
+  @result.photo.should be_kind_of String
+  @result.photo.should =~ /^http:.*jpg$/
+end
 
+When /^the birth date should be "([^"]*)"$/ do |arg|
+  @result.birthdate.should == Date.parse(arg)
+end
 
+When /^the profile path shuld be "([^"]*)"$/ do |arg|
+  @result.profile_path.should == arg
+end
 
+When /^the real name shoud be "([^"]*)"$/ do |arg|
+  @result.real_name.should == arg
+end

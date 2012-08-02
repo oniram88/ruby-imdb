@@ -81,7 +81,7 @@ module IMDB
     #Return the principal Photo
     #@return [String]
     def photo
-      photo_document.at("img#primary-img").get_attribute('src') if photo_document
+      photo_document.at("img#primary-img").get_attribute('src') if photo_document rescue nil
     end
 
     #Return the Filmography

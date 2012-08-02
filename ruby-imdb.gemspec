@@ -12,44 +12,11 @@ Gem::Specification.new do |s|
   s.date = %q{2010-05-30}
   s.description = %q{Ruby IMDB Parsing Library}
   s.email = %q{yalcin@webliyacelebi.com}
-  s.extra_rdoc_files = [
-    "LICENSE",
-     "README.md"
-  ]
-  s.files = [
-    ".gitignore",
-     "LICENSE",
-     "README.md",
-     "Rakefile",
-     "VERSION",
-     "features/movie.feature",
-     "features/search.feature",
-     "features/step_definitions/movie_steps.rb",
-     "features/step_definitions/search_steps.rb",
-     "lib/configuration.rb",
-     "lib/doc/_index.html",
-     "lib/doc/class_list.html",
-     "lib/doc/css/common.css",
-     "lib/doc/css/full_list.css",
-     "lib/doc/css/style.css",
-     "lib/doc/file_list.html",
-     "lib/doc/frames.html",
-     "lib/doc/index.html",
-     "lib/doc/js/app.js",
-     "lib/doc/js/full_list.js",
-     "lib/doc/js/jquery.js",
-     "lib/doc/method_list.html",
-     "lib/doc/top-level-namespace.html",
-     "lib/imdb.rb",
-     "lib/imdb/movie.rb",
-     "lib/imdb/person.rb",
-     "lib/imdb/search.rb",
-     "lib/imdb/skeleton.rb",
-     "ruby-imdb.gemspec"
-  ]
+  s.extra_rdoc_files = %w(LICENSE README.md)
+  s.files = %w(.gitignore LICENSE README.md Rakefile VERSION features/movie.feature features/search.feature features/step_definitions/movie_steps.rb features/step_definitions/search_steps.rb lib/configuration.rb lib/doc/_index.html lib/doc/class_list.html lib/doc/css/common.css lib/doc/css/full_list.css lib/doc/css/style.css lib/doc/file_list.html lib/doc/frames.html lib/doc/index.html lib/doc/js/app.js lib/doc/js/full_list.js lib/doc/js/jquery.js lib/doc/method_list.html lib/doc/top-level-namespace.html lib/imdb.rb lib/imdb/movie.rb lib/imdb/person.rb lib/imdb/search.rb lib/imdb/skeleton.rb lib/imdb/cast.rb ruby-imdb.gemspec)
   s.homepage = %q{http://github.com/yalcin/ruby-imdb}
-  s.rdoc_options = ["--charset=UTF-8"]
-  s.require_paths = ["lib"]
+  s.rdoc_options = %w(--charset=UTF-8)
+  s.require_paths = %w(lib)
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{Ruby IMDB Parsing Library}
 

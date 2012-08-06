@@ -15,6 +15,7 @@ module IMDB
                        :cast => Array,
                        :photos => Array,
                        :director => String,
+                       :director_person => Person,
                        :genres => Array,
                        :rating => Float,
                        :movielength => Integer,
@@ -49,7 +50,7 @@ module IMDB
     end
 
     # Get movie cast listing
-    # @return [Array]
+    # @return [Cast[]]
     def cast
       doc.search("table.cast tr").map do |link|
         #picture = link.children[0].search("img")[0]["src"] rescue nil
@@ -94,7 +95,19 @@ module IMDB
     # Get Director
     # @return [String]
     def director
-      doc.xpath("//h4[contains(., 'Director')]/..").at("a").content rescue nil
+      self.director_person.name rescue nil
+    end
+
+    # Get Director Person class
+    # @return [Person]
+    def director_person
+      begin
+        link=doc.xpath("//h4[contains(., 'Director')]/..").at('a[@href^="/name/nm"]')
+        profile = link['href'].match(/\/name\/nm([0-9]+)/)[1] rescue nil
+        IMDB::Person.new(profile) unless profile.nil?
+      rescue
+        nil
+      end
     end
 
     # Genre List

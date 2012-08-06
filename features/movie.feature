@@ -8,6 +8,7 @@ Feature: Get movie information
     And the release year should be 1999
     And the poster should be a link to an image
     And the director should be "Terry Gilliam"
+    And the director person should be a Class of Person
     And it should have many photos
     And the writers should be "Hunter S. Thompson, Terry Gilliam, Tony Grisoni, Tod Davies, Alex Cox"
     And the short_description should be "An oddball journalist and his psychopathic lawyer travel to Las Vegas for a series of psychadelic escapades."
@@ -30,4 +31,8 @@ Feature: Get movie information
     When I get first entry from result set
     Then the poster should be a link to an image
     And the poster should be "http://ia.media-imdb.com/images/M/MV5BMjA4NDI0Mjg4NV5BMl5BanBnXkFtZTcwOTM1NTY0Mg@@.jpg"
+  Scenario: Whant director name
+    Given I have movie with id "1067106"
+    Then the director should be "Robert Zemeckis"
+    Then the director person should be a Class of Person
 

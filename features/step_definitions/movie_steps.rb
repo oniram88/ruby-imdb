@@ -1,4 +1,8 @@
-begin require 'rspec/expectations'; rescue LoadError; require 'spec/expectations'; end
+begin
+  require 'rspec/expectations';
+rescue LoadError;
+  require 'spec/expectations';
+end
 require 'cucumber/formatter/unicode'
 $:.unshift(File.dirname(__FILE__) + '/../../lib')
 require 'imdb'
@@ -11,6 +15,10 @@ end
 
 Given /I have movie name called "(.*)"/ do |n|
   @result = IMDB::Search.new.movie(n.to_s)
+end
+
+Given /^I have movie with id "(.*)"/ do |n|
+  @movie = IMDB::Movie.new(n)
 end
 
 When /I get first entry from result set/ do
@@ -29,7 +37,7 @@ Then /^the genres should be "(.*?)"$/ do |arg1|
   @movie.genres.should == arg1.split(/, */)
 end
 
-Then /^the rating should be a number between (\d+) and (\d+)$/ do |min,max|
+Then /^the rating should be a number between (\d+) and (\d+)$/ do |min, max|
   @movie.rating.should be_kind_of Numeric
   (min.to_f...max.to_f).should include @movie.rating
 end
@@ -49,6 +57,10 @@ Then /^the director should be "(.*?)"$/ do |arg1|
   @movie.director.should == arg1
 end
 
+Then /^the director person should be a Class of Person$/ do
+  @movie.director_person.should be_kind_of IMDB::Person
+end
+
 Then /^it should have many photos$/ do
   @movie.photos.count.should > 3
   @movie.photos.each do |photo|
@@ -57,7 +69,7 @@ Then /^it should have many photos$/ do
 end
 
 Then /^the writers should be "(.*?)"$/ do |arg1|
-  @movie.writers.map{|i|i.name}.join(", ").should == arg1
+  @movie.writers.map { |i| i.name }.join(", ").should == arg1
 end
 
 Then /^the short_description should be "(.*?)"$/ do |arg1|

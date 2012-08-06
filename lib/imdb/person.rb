@@ -67,7 +67,7 @@ module IMDB
     end
 
     #Get the height
-    #@return []
+    #@return [String]
     def height
       bio_document.at("h5[text()*='Height']").next.inner_text.match(/\((.+)\)/)[1] rescue nil
     end

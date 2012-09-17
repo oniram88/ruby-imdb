@@ -3,7 +3,7 @@ module IMDB
     def movie(keyword)
       doc = Nokogiri::HTML(open("http://www.imdb.com/find?s=tt&q=#{CGI.escape(keyword)}"))
       @ret_val = []
-      if doc.at("h1.header")   # we're already being redirected to movie's page
+      if doc.at("h1.header") # we're already being redirected to movie's page
         single_result(doc)
       else
         result_list(doc)
@@ -13,8 +13,8 @@ module IMDB
 
     def to_hash
       i = 0
-      tmp_hash = {}
-      @ret_val.each {|r|
+      tmp_hash = { }
+      @ret_val.each { |r|
         tmp_hash[i] = r.to_hash
         i = i + 1
       }
@@ -30,29 +30,30 @@ module IMDB
       title = doc.at("h1.header")
       link = doc.at("link[rel=canonical]")["href"]
       title = title.text.strip.gsub(/\s+/, " ")
-      @ret_val <<  IMDB::Result.new( link[/\d+/], title , link )
+      @ret_val << IMDB::Result.new(link[/\d+/], title, link)
     end
 
     def result_list(doc)
-      @ret_val = doc.search('a[@href^="/title/tt"]').reduce([]) do |ret_val,node|
+      @ret_val = doc.search('a[@href^="/title/tt"]').reduce([]) do |ret_val, node|
         unless node.content.blank?
-          link =  "http://www.imdb.com#{node['href']}"
-          id   = node["href"][/\d+/]
+          link = "http://www.imdb.com#{node['href']}"
+          id = node["href"][/\d+/]
           ret_val << IMDB::Result.new(id, node.content, link)
         end
         ret_val
       end
+      @ret_val.uniq { |el| el.imdb_id }
     end
   end # Search
 
   class Result < IMDB::Skeleton
     def initialize(imdb_id, title, link)
-      super("Result",{
-        :title => String,
-        :link => String,
-        :imdb_id => String}, [:imdb_id])
-      @title   = title
-      @link    = link
+      super("Result", {
+          :title => String,
+          :link => String,
+          :imdb_id => String }, [:imdb_id])
+      @title = title
+      @link = link
       @imdb_id = imdb_id
     end
 

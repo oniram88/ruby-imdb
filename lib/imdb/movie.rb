@@ -68,7 +68,7 @@ module IMDB
     # @return [Array]
     def photos
       begin
-        doc.search("#title-overview-widget .mediastrip img").map { |i| i["src"] }
+        doc.search('#main .thumb_list img').map { |i| i["src"] }
       rescue
         nil
       end
@@ -153,6 +153,8 @@ module IMDB
     def doc
       if caller[0] =~ /`([^']*)'/ and ($1 == "cast" or $1 == "writers")
         @doc_full ||= Nokogiri::HTML(open("#{@link}/fullcredits"))
+      elsif caller[0] =~ /`([^']*)'/ and ($1 == "photos")
+        @doc_photo ||= Nokogiri::HTML(open("#{@link}/mediaindex"))
       else
         @doc ||= Nokogiri::HTML(open("#{@link}"))
       end

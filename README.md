@@ -1,3 +1,12 @@
+Change Repository and gem:
+--------------------
+
+- [sudo] gem i imdb-scan
+- https://github.com/oniram88/imdb-scan.git
+
+
+
+
 Welcome to Ruby IMDB
 --------------------
 

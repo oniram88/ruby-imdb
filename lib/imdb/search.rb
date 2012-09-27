@@ -42,7 +42,11 @@ module IMDB
         end
         ret_val
       end
-      @ret_val.uniq { |el| el.imdb_id }
+
+      h = {}
+      @ret_val.each {|e| h[e.imdb_id]=e}
+
+      @ret_val=h.values
     end
   end # Search
 

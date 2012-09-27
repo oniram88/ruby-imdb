@@ -1,4 +1,8 @@
-begin require 'rspec/expectations'; rescue LoadError; require 'spec/expectations'; end
+begin
+  require 'rspec/expectations';
+rescue LoadError;
+  require 'spec/expectations';
+end
 require 'cucumber/formatter/unicode'
 $:.unshift(File.dirname(__FILE__) + '/../../lib')
 require 'imdb'
@@ -21,4 +25,9 @@ Then /the result should be equal to (\d+)/ do |result|
 end
 Then /the first title should be "(.*)"/ do |title|
   @result.first.title.should == title
+end
+
+Then /The result (\d+) should be unique in the list/ do |id|
+  puts @result.inspect
+  @result.select { |f| f.imdb_id==id }.length.should == 1
 end
